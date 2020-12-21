@@ -14,11 +14,14 @@ class Camera:
         self.camera.vflip = False
         self.camera.hflip = False
 
-    def take_picture(self):
+    def take_picture(self, add_timestamp=False):
         self.camera.start_preview()
         sleep(2)
-        timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
-        _filename = 'pic-{}.jpg'.format(timestamp)
+        _filename = 'picture.jpg'
+        if add_timestamp:
+            timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
+            _filename = 'picture-{}.jpg'.format(timestamp)
+
         self.camera.capture(_filename)
 
 
