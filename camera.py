@@ -6,6 +6,7 @@ from time import sleep
 import time
 import atexit
 
+from sender import sender
 
 class Camera:
     def __init__(self):
@@ -23,6 +24,7 @@ class Camera:
             _filename = 'picture-{}.jpg'.format(timestamp)
 
         self.camera.capture(_filename)
+        return _filename
 
 
 class MyServo:
@@ -58,6 +60,12 @@ class MyServo:
         time.sleep(0.1)
         
 
+def send(filename):
+    file_path = f'./{filename}'
+    if sender.is_ready:
+        f = open(file_path, 'rb').read()
+        sender.send(f);
+
 servo = MyServo(27)
 camera = Camera()
 angle_step = 3
@@ -65,9 +73,13 @@ while(True):
     for angle in range(30, 150, angle_step):
         servo.rotate_to(angle)
         if angle % 30 == 0:
-            camera.take_picture()
+            _filename = camera.take_picture()
+            # Enhance me: make it async
+            send(_filename)
 
     for angle in range(150, 30, -angle_step):
         servo.rotate_to(angle)
         if angle % 30 == 0:
-            camera.take_picture()
+            _filename = camera.take_picture()
+            # Enhance me: make it async
+            send(_filename)
