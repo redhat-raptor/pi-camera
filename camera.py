@@ -64,7 +64,13 @@ def send(filename):
     file_path = f'./{filename}'
     if sender.is_ready:
         f = open(file_path, 'rb').read()
-        sender.send(f);
+        try:
+            sender.send(f);
+        except Exception as e:
+            print('Warning: Failed to send picture! Error: {}'.format(e))
+        else:
+            print('Picrture sent!')
+
 
 servo = MyServo(27)
 camera = Camera()
