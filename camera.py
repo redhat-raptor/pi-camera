@@ -5,8 +5,17 @@ import numpy as np
 from time import sleep
 import time
 import atexit
-
+import os
+import logging
 from sender import sender
+
+logging.basicConfig(level=logging.DEBUG)
+
+PUSH_BUTTON_PIN = int(os.environ.get('PUSH_BUTTON_PIN'))
+logging.info('Using PUSH_BUTTON_PIN: %s', PUSH_BUTTON_PIN)
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(PUSH_BUTTON_PIN, GPIO.IN)
 
 class Camera:
     def __init__(self):
@@ -16,6 +25,7 @@ class Camera:
         self.camera.hflip = False
 
     def take_picture(self, add_timestamp=False):
+        logging.debug('Taking picture {} timestamp'.format('with' if add_timestamp else 'without'))
         self.camera.start_preview()
         sleep(2)
         _filename = 'picture.jpg'
@@ -41,7 +51,10 @@ def send(filename):
 
 camera = Camera()
 while(True):
-    _filename = camera.take_picture()
+    if not GPIO.input(PUSH_BUTTON_PIN):
+        continue
+
+    _filename = camera.take_picture(True)
     # Enhance me: make it async
     send(_filename)
     sleep(5)
