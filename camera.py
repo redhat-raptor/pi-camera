@@ -51,14 +51,9 @@ def send(filename):
 
 
 while(True):
-    if not GPIO.input(PUSH_BUTTON_PIN):
-        continue
-
-    res_mode = os.environ.get('RES_MODE')
-    
-    if res_mode == '1':
+    if GPIO.input(1):
         camera = Camera(1920, 1080)
-    elif res_mode == '2':
+    elif GPIO.input(2):
         camera = Camera(1920, 1080)
     else:
         camera = Camera()
