@@ -11,11 +11,10 @@ from sender import sender
 
 logging.basicConfig(level=logging.DEBUG)
 
-PUSH_BUTTON_PIN = int(os.environ.get('PUSH_BUTTON_PIN'))
-logging.info('Using PUSH_BUTTON_PIN: %s', PUSH_BUTTON_PIN)
-
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(PUSH_BUTTON_PIN, GPIO.IN)
+GPIO.setup(1, GPIO.IN)
+GPIO.setup(2, GPIO.IN)
+GPIO.setup(3, GPIO.IN)
 
 class Camera:
     def __init__(self, width=1024, height=768):
