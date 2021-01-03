@@ -18,9 +18,9 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(PUSH_BUTTON_PIN, GPIO.IN)
 
 class Camera:
-    def __init__(self):
+    def __init__(self, width=1024, height=768):
         self.camera = PiCamera()
-        self.camera.resolution = (1024, 768)
+        self.camera.resolution = (width, height)
         self.camera.vflip = False
         self.camera.hflip = False
 
@@ -49,10 +49,19 @@ def send(filename):
             print('Picrture sent!')
 
 
-camera = Camera()
+
 while(True):
     if not GPIO.input(PUSH_BUTTON_PIN):
         continue
+
+    res_mode = os.environ.get('RES_MODE')
+    
+    if res_mode == '1':
+        camera = Camera(1920, 1080)
+    elif res_mode == '2':
+        camera = Camera(1920, 1080)
+    else:
+        camera = Camera()
 
     _filename = camera.take_picture(True)
     # Enhance me: make it async
